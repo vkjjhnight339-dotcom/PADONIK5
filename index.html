@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>หน้าแรก • ชื่อร้านของคุณ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3f8ff; --card:#ffffff; --ink:#0f2a4a; --muted:#5b7394;
+  --line:#d9e6f7; --blue:#1d6fe8; --blue-d:#154fb0; --blue-l:#e4efff; --sky:#5aa9ff;
+  --ok:#14a36b; --bad:#e5484d;
+}
+*{box-sizing:border-box;margin:0}
+body{font-family:'Prompt',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1160px;margin:0 auto;padding:0 20px}
+:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+
+/* ประกาศ */
+.notice{background:var(--blue-d);color:#fff;font-size:14px;text-align:center;padding:8px 16px}
+
+/* แถบเมนู */
+header{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
+.nav{display:flex;align-items:center;gap:20px;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;color:var(--blue-d)}
+.logo .img-slot{width:38px;height:38px;border-radius:10px}
+.menu{display:flex;gap:4px}
+.menu a{padding:8px 14px;border-radius:999px;font-size:15px;color:var(--muted)}
+.menu a:hover,.menu a.on{background:var(--blue-l);color:var(--blue)}
+.search{margin-left:auto;display:flex}
+.search input{width:220px;border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:8px 16px;font:inherit;font-size:14px;color:var(--ink)}
+.btn{display:inline-block;border:0;cursor:pointer;font:inherit;font-weight:500;font-size:14px;padding:9px 18px;border-radius:999px;background:var(--blue);color:#fff}
+.btn:hover{background:var(--blue-d)}
+.btn.ghost{background:transparent;color:var(--blue);border:1px solid var(--blue)}
+.btn.ghost:hover{background:var(--blue-l)}
+.auth{display:flex;gap:8px}
+
+/* รูปที่ต้องใส่เอง */
+.img-slot{background:linear-gradient(135deg,var(--blue-l),#cfe2ff);display:flex;align-items:center;justify-content:center;color:#8aa8d6;font-size:12px;overflow:hidden}
+.img-slot img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* ส่วนต้อนรับ */
+.hero{margin:28px 0;border-radius:24px;background:linear-gradient(120deg,var(--blue-d),var(--blue) 60%,var(--sky));color:#fff;display:grid;grid-template-columns:1.2fr 1fr;gap:24px;align-items:center;overflow:hidden}
+.hero-text{padding:48px 0 48px 44px}
+.hero h1{font-size:clamp(28px,4vw,42px);line-height:1.25;margin-bottom:12px}
+.hero p{opacity:.92;max-width:52ch;margin-bottom:22px}
+.hero .btn{background:#fff;color:var(--blue-d)}
+.hero .btn.ghost{background:transparent;color:#fff;border-color:#fff;margin-left:8px}
+.hero .img-slot{min-height:280px;height:100%;border-radius:0;background:rgba(255,255,255,.14);color:#dbeaff}
+
+/* สถิติ */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:36px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.stat b{display:block;font-size:26px;color:var(--blue)}
+.stat span{font-size:14px;color:var(--muted)}
+
+h2{font-size:22px;margin-bottom:4px}
+.sub{color:var(--muted);font-size:14px;margin-bottom:18px}
+section{margin-bottom:44px}
+
+/* สินค้า */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:.15s}
+.card:hover{border-color:var(--sky);transform:translateY(-3px)}
+.card .img-slot{aspect-ratio:4/3}
+.card-body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card h3{font-size:15px;font-weight:600}
+.price{color:var(--blue);font-weight:700;font-size:18px}
+.stock{font-size:13px;color:var(--ok)}
+.card.out{opacity:.6}
+.card.out .stock{color:var(--bad)}
+.card .btn{margin-top:auto;text-align:center}
+.card.out .btn{background:#b9c7db;pointer-events:none}
+.tag{align-self:flex-start;background:#fff1c2;color:#8a6100;font-size:12px;padding:1px 10px;border-radius:999px}
+
+/* หมวดหมู่ */
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}
+.cat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;display:flex;gap:12px;align-items:center}
+.cat:hover{border-color:var(--sky)}
+.cat .img-slot{width:52px;height:52px;border-radius:12px;flex:none}
+.cat b{font-size:15px;display:block}
+.cat small{color:var(--muted)}
+
+/* กิจกรรมล่าสุด */
+.feed{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:8px 20px}
+.feed-head{display:flex;justify-content:space-between;align-items:center}
+.live{background:#ffe9ea;color:var(--bad);font-size:12px;font-weight:600;padding:2px 12px;border-radius:999px;display:flex;align-items:center;gap:6px}
+.live::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--bad)}
+.feed li{list-style:none;display:flex;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line);font-size:14px}
+.feed li:first-child{border-top:0}
+.feed .img-slot{width:36px;height:36px;border-radius:50%;flex:none}
+.feed time{margin-left:auto;color:var(--muted);font-size:13px;white-space:nowrap}
+
+/* คำถามที่พบบ่อย */
+details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:500}
+details p{margin-top:8px;color:var(--muted);font-size:14px}
+
+footer{background:var(--card);border-top:1px solid var(--line);padding:28px 0;font-size:14px;color:var(--muted)}
+.foot{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
+
+/* ระบบสมาชิก */
+.modal{position:fixed;inset:0;background:rgba(10,30,60,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+.modal.open{display:flex}
+.box{background:var(--card);border-radius:22px;width:100%;max-width:400px;padding:28px;position:relative}
+.box .x{position:absolute;top:12px;right:16px;border:0;background:none;font-size:26px;cursor:pointer;color:var(--muted)}
+.tabs{display:flex;background:var(--blue-l);border-radius:999px;padding:4px;margin-bottom:18px}
+.tabs button{flex:1;border:0;background:none;font:inherit;font-weight:500;padding:8px;border-radius:999px;cursor:pointer;color:var(--muted)}
+.tabs button.on{background:var(--blue);color:#fff}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+.field input{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 14px;font:inherit;color:var(--ink);background:var(--bg)}
+.field input:focus{border-color:var(--blue);outline:0;box-shadow:0 0 0 3px var(--blue-l)}
+.field.err input{border-color:var(--bad)}
+.msg{font-size:12px;color:var(--bad);min-height:16px;margin-top:2px}
+.box .btn{width:100%;padding:11px}
+.form-msg{font-size:14px;text-align:center;margin-bottom:10px;color:var(--bad);min-height:20px}
+.user{display:none;align-items:center;gap:10px;font-size:14px}
+.user .bal{background:var(--blue-l);color:var(--blue-d);padding:3px 12px;border-radius:999px;font-weight:600}
+.user button{border:0;background:none;color:var(--muted);cursor:pointer;font:inherit;font-size:13px;text-decoration:underline}
+body.in .auth{display:none}
+body.in .user{display:flex}
+.row{border-top:1px solid var(--line);padding:10px 0;font-size:14px}.row pre{background:var(--blue-l);padding:8px 12px;border-radius:10px;margin-top:6px;white-space:pre-wrap;word-break:break-all;user-select:all}#pbody h3{margin:14px 0 6px;font-size:16px}.user #uname{cursor:pointer;font-weight:600;color:var(--blue-d)}.btn:disabled{background:#b9c7db;cursor:not-allowed}.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 20px;border-radius:999px;font-size:14px;display:none;z-index:60}
+@media(max-width:820px){
+  .menu{display:none}
+  .search input{width:130px}
+  .hero{grid-template-columns:1fr}
+  .hero-text{padding:32px 24px 8px}
+  .hero .img-slot{min-height:180px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .auth .ghost{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="notice">⚠️ เติมเงินให้ครบราคาสินค้า ไม่เติมเกินจำนวนสินค้านะคะ • มีปัญหาแจ้งไลน์ @yourline (มี @ นำหน้า)</div>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#">
+      <!-- 🖼️ ใส่โลโก้: <img src="logo.png" alt="โลโก้"> -->
+      <span class="img-slot">โลโก้</span>
+      ชื่อร้านของคุณ
+    </a>
+    <nav class="menu">
+      <a class="on" href="#">หน้าแรก</a>
+      <a href="#products">สินค้าทั้งหมด</a>
+      <a href="#" onclick="showPanel('topup');return false">เติมเงิน</a>
+      <a href="#contact">ติดต่อเรา</a>
+    </nav>
+    <div class="search"><input id="q" type="search" placeholder="ค้นหาสินค้า" aria-label="ค้นหาสินค้า"></div>
+    <div class="auth">
+      <button class="btn ghost" data-open="signup">สมัครสมาชิก</button>
+      <button class="btn" data-open="signin">เข้าสู่ระบบ</button>
+    </div>
+    <div class="user" id="user">
+      <span id="uname"></span><span class="bal" id="ubal"></span>
+      <button id="logout">ออกจากระบบ</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="hero">
+    <div class="hero-text">
+      <h1>ยินดีต้อนรับสู่ร้านของเรา</h1>
+      <p>บริการเช่าแอพดูหนังและจัดจำหน่ายซอฟต์แวร์ AI ราคาถูก รบกวนอ่านรายละเอียดสินค้าก่อนกดสั่งซื้อ หากมีปัญหาหรือสอบถามการใช้งาน ติดต่อไลน์ @yourline</p>
+      <button class="btn" data-open="signin">เข้าสู่ระบบ</button><button class="btn ghost" data-open="signup">สมัครสมาชิก</button>
+    </div>
+    <!-- 🖼️ ใส่รูปแบนเนอร์: <img src="banner.png" alt="แบนเนอร์"> -->
+    <div class="img-slot">รูปแบนเนอร์</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b data-st="users">0</b><span>ผู้ใช้ทั้งหมด</span></div>
+    <div class="stat"><b data-st="products">0</b><span>สินค้าทั้งหมด</span></div>
+    <div class="stat"><b data-st="stock">0</b><span>สต๊อกทั้งหมด</span></div>
+    <div class="stat"><b data-st="sold">0</b><span>ขายแล้วทั้งหมด</span></div>
+  </div>
+
+  <section id="products">
+    <h2>สินค้าทั้งหมด</h2>
+    <p class="sub">เลือกแพ็กเกจที่ต้องการได้เลย</p>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section>
+    <h2>หมวดหมู่สินค้า</h2>
+    <p class="sub">เลือกดูตามประเภท</p>
+    <div class="cats" id="cats"></div>
+  </section>
+
+  <section>
+    <div class="feed">
+      <div class="feed-head">
+        <div><h2 style="margin-top:14px">กิจกรรมล่าสุด</h2><p class="sub">ติดตามกิจกรรมของร้านค้าแบบเรียลไทม์</p></div>
+        <span class="live">สด</span>
+      </div>
+      <ul id="feed"></ul>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>คำถามที่พบบ่อย</h2>
+    <p class="sub">Frequently asked questions</p>
+    <details open><summary>แจ้งปัญหาการใช้แอพได้ที่ไหน</summary><p>ทักไลน์ @yourline (มี @ นำหน้า) ได้ทุกวัน ทีมงานจะตอบกลับโดยเร็วที่สุด</p></details>
+    <details><summary>เติมเงินแล้วเงินเข้าเมื่อไหร่</summary><p>ยอดเงินเข้าอัตโนมัติภายในไม่กี่นาที หากเกิน 15 นาทีให้แจ้งทีมงานพร้อมสลิป</p></details>
+    <details><summary>ซื้อแล้วได้รับสินค้าอย่างไร</summary><p>หลังชำระเงินสำเร็จ รายละเอียดสินค้าจะแสดงในหน้าประวัติการสั่งซื้อทันที</p></details>
+  </section>
+</main>
+
+<footer id="topup">
+  <div class="wrap foot">
+    <span>© 2026 ชื่อร้านของคุณ</span>
+    <span>ติดต่อร้านค้าไม่ได้ / ต้องการรายงานปัญหา? <a href="#" style="color:var(--blue)">แจ้งที่นี่</a></span>
+  </div>
+</footer>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mtitle">
+  <div class="box">
+    <button class="x" id="close" aria-label="ปิด">&times;</button>
+    <div class="tabs">
+      <button data-tab="signin" class="on">เข้าสู่ระบบ</button>
+      <button data-tab="signup">สมัครสมาชิก</button>
+    </div>
+    <h2 id="mtitle" style="margin-bottom:14px">เข้าสู่ระบบ</h2>
+    <div class="form-msg" id="fmsg" aria-live="polite"></div>
+    <form id="form" novalidate>
+      <div class="field"><label for="f-user">ชื่อผู้ใช้</label><input id="f-user" autocomplete="username"><div class="msg"></div></div>
+      <div class="field" data-su><label for="f-email">อีเมล</label><input id="f-email" type="email" autocomplete="email"><div class="msg"></div></div>
+      <div class="field"><label for="f-pass">รหัสผ่าน</label><input id="f-pass" type="password" autocomplete="current-password"><div class="msg"></div></div>
+      <div class="field" data-su><label for="f-pass2">ยืนยันรหัสผ่าน</label><input id="f-pass2" type="password" autocomplete="new-password"><div class="msg"></div></div>
+      <button class="btn" id="submit" type="submit">เข้าสู่ระบบ</button>
+    </form>
+  </div>
+</div>
+<div class="modal" id="panel"><div class="box" style="max-width:560px;max-height:88vh;overflow:auto">
+  <button class="x" id="pclose" aria-label="ปิด">&times;</button>
+  <div class="tabs" id="ptabs"><button data-p="orders">บัญชีของฉัน</button><button data-p="topup">เติมเงิน</button><button data-p="admin" style="display:none">แอดมิน</button></div>
+  <div id="pbody"></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===== ระบบสมาชิก (เดโมฝั่งเบราว์เซอร์) =====
+   ข้อมูลเก็บใน localStorage ของเครื่องผู้ใช้เท่านั้น
+   ถ้าใช้งานจริงให้ย้าย register()/login() ไปเรียก API หลังบ้านแทน (ดูจุดที่มี // API) */
+const $ = id => document.getElementById(id);
+async function api(url, body){
+  const r = await fetch('/api/' + url, body === undefined ? {} : {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) throw d.error || 'เกิดข้อผิดพลาด';
+  return d;
+}
+const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let ME = null;
+
+/* ===== UI ===== */
+let mode = 'signin';
+const modal = $('modal'), form = $('form');
+function setMode(m){
+  mode = m;
+  document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === m));
+  document.querySelectorAll('[data-su]').forEach(e => e.style.display = m === 'signup' ? '' : 'none');
+  const t = m === 'signup' ? 'สมัครสมาชิก' : 'เข้าสู่ระบบ';
+  $('mtitle').textContent = t; $('submit').textContent = t;
+  $('f-pass').autocomplete = m === 'signup' ? 'new-password' : 'current-password';
+  clearErr();
+}
+function clearErr(){
+  $('fmsg').textContent = '';
+  form.querySelectorAll('.field').forEach(f => { f.classList.remove('err'); f.querySelector('.msg').textContent = ''; });
+}
+function err(id, text){ const f = $(id).parentElement; f.classList.add('err'); f.querySelector('.msg').textContent = text; return false; }
+function openModal(m){ setMode(m); modal.classList.add('open'); $('f-user').focus(); }
+function closeModal(){ modal.classList.remove('open'); form.reset(); clearErr(); }
+function toast(t){ const el = $('toast'); el.textContent = t; el.style.display = 'block'; setTimeout(() => el.style.display = 'none', 2600); }
+
+document.querySelectorAll('[data-open]').forEach(b => b.onclick = () => openModal(b.dataset.open));
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => setMode(b.dataset.tab));
+$('close').onclick = closeModal;
+modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+function validate(){
+  clearErr();
+  const u = $('f-user').value.trim(), em = $('f-email').value.trim(), p = $('f-pass').value, p2 = $('f-pass2').value;
+  let ok = true;
+  if (mode === 'signup'){
+    if (!/^[A-Za-z0-9_]{4,20}$/.test(u)) ok = err('f-user', 'ใช้ a-z, 0-9, _ ความยาว 4–20 ตัว');
+    if (!/^\S+@\S+\.\S+$/.test(em)) ok = err('f-email', 'รูปแบบอีเมลไม่ถูกต้อง');
+    if (p.length < 8 || !/[A-Za-z]/.test(p) || !/\d/.test(p)) ok = err('f-pass', 'อย่างน้อย 8 ตัว มีทั้งตัวอักษรและตัวเลข');
+    if (p2 !== p) ok = err('f-pass2', 'รหัสผ่านไม่ตรงกัน');
+  } else {
+    if (!u) ok = err('f-user', 'กรอกชื่อผู้ใช้');
+    if (!p) ok = err('f-pass', 'กรอกรหัสผ่าน');
+  }
+  return ok;
+}
+
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  if (!validate()) return;
+  const u = $('f-user').value.trim(), em = $('f-email').value.trim(), p = $('f-pass').value;
+  $('submit').disabled = true;
+  try {
+    if (mode === 'signup'){ ME = (await api('register', {username:u, email:em, password:p})).user; toast('สมัครสมาชิกสำเร็จ ยินดีต้อนรับ!'); }
+    else { ME = (await api('login', {username:u, password:p})).user; toast('เข้าสู่ระบบสำเร็จ'); }
+    closeModal(); refreshUser();
+  } catch (m) { $('fmsg').textContent = typeof m === 'string' ? m : 'เกิดข้อผิดพลาด ลองอีกครั้ง'; }
+  $('submit').disabled = false;
+});
+
+function refreshUser(){
+  document.body.classList.toggle('in', !!ME);
+  if (ME){ $('uname').textContent = ME.username + (ME.role === 'admin' ? ' (แอดมิน)' : ''); $('ubal').textContent = Number(ME.balance).toLocaleString() + ' บาท'; }
+}
+$('logout').onclick = async () => { await api('logout', {}); ME = null; refreshUser(); toast('ออกจากระบบแล้ว'); };
+
+/* ===== ร้านค้า ===== */
+let SHOP = {products:[], categories:[]};
+const slot = (src, n) => src ? `<span class="img-slot"><img src="${esc(src)}" alt="${esc(n)}"></span>` : `<span class="img-slot">รูป</span>`;
+const ago = t => { const m = Math.max(1, Math.round((Date.now() - t) / 60000)); return m < 60 ? m + ' นาทีที่แล้ว' : m < 1440 ? Math.round(m / 60) + ' ชม.ที่แล้ว' : Math.round(m / 1440) + ' วันที่แล้ว'; };
+
+function render(){
+  const k = $('q').value.trim().toLowerCase(), cat = window.CAT;
+  const list = SHOP.products.filter(p => p.name.toLowerCase().includes(k) && (!cat || p.category_id === cat));
+  $('grid').innerHTML = list.map(p => `
+    <div class="card ${p.stock ? '' : 'out'}">${slot(p.img, p.name)}
+      <div class="card-body"><h3>${esc(p.name)}</h3><div class="price">${p.price} บาท</div>
+      <div class="stock">${p.stock ? 'เหลือ ' + p.stock + ' ชิ้น' : 'สินค้าหมด'}</div>
+      <button class="btn" data-buy="${p.id}" ${p.stock ? '' : 'disabled'}>${p.stock ? 'ซื้อสินค้านี้' : 'สินค้าหมด'}</button></div></div>`).join('') || '<p class="sub">ไม่พบสินค้า</p>';
+}
+async function loadShop(){
+  SHOP = await api('shop');
+  const st = SHOP.stats; document.querySelectorAll('[data-st]').forEach(e => e.textContent = st[e.dataset.st].toLocaleString());
+  $('cats').innerHTML = SHOP.categories.map(c => `<a class="cat" href="#products" data-cat="${c.id}">${slot(c.img, c.name)}<div><b>${esc(c.name)}</b><small>มีสินค้า ${c.n} รายการ</small></div></a>`).join('');
+  $('feed').innerHTML = SHOP.feed.map(f => `<li>${slot('', '')}<span><b>ผู้ใช้ ${esc(f.who)}</b> ซื้อ ${esc(f.name)}</span><time>${ago(f.created)}</time></li>`).join('') || '<li>ยังไม่มีกิจกรรม</li>';
+  render();
+}
+$('q').addEventListener('input', render);
+$('cats').addEventListener('click', e => { const c = e.target.closest('[data-cat]'); if (c){ const id = +c.dataset.cat; window.CAT = window.CAT === id ? 0 : id; render(); } });
+$('grid').addEventListener('click', async e => {
+  const b = e.target.closest('[data-buy]'); if (!b) return;
+  if (!ME) return openModal('signin');
+  const p = SHOP.products.find(x => x.id == b.dataset.buy);
+  if (!confirm(`ซื้อ "${p.name}" ราคา ${p.price} บาท ?`)) return;
+  try { const r = await api('buy', {id:p.id}); ME.balance = r.balance; refreshUser(); await loadShop(); showPanel('orders'); toast('ซื้อสำเร็จ'); }
+  catch (m) { toast(m); }
+});
+
+/* ===== บัญชีของฉัน / เติมเงิน / แอดมิน ===== */
+const panel = $('panel');
+async function showPanel(tab){
+  if (!ME) return openModal('signin');
+  panel.classList.add('open');
+  document.querySelectorAll('#ptabs button').forEach(b => { b.classList.toggle('on', b.dataset.p === tab); if (b.dataset.p === 'admin') b.style.display = ME.role === 'admin' ? '' : 'none'; });
+  const B = $('pbody'); B.innerHTML = 'กำลังโหลด...';
+  try {
+    if (tab === 'orders'){
+      const d = await api('orders');
+      B.innerHTML = '<h3>ประวัติการซื้อ</h3>' + (d.orders.map(o => `<div class="row"><b>${esc(o.name)}</b> • ${o.price} บาท • ${ago(o.created)}<pre>${esc(o.data)}</pre></div>`).join('') || '<p class="sub">ยังไม่มีรายการ</p>') +
+        '<h3>ประวัติเติมเงิน</h3>' + (d.topups.map(t => `<div class="row">${t.amount} บาท • ${esc(t.ref)} • <b>${{pending:'รออนุมัติ',approved:'สำเร็จ',rejected:'ไม่อนุมัติ'}[t.status]}</b></div>`).join('') || '<p class="sub">ยังไม่มีรายการ</p>');
+    } else if (tab === 'topup'){
+      B.innerHTML = `<h3>เติมเงิน</h3><p class="sub">โอนเงินเข้าบัญชีร้าน (แก้ข้อมูลบัญชีตรงนี้ใน index.html) แล้วกรอกยอดกับเลขอ้างอิงจากสลิป แอดมินจะตรวจสอบและเพิ่มยอดให้</p>
+        <div class="img-slot" style="height:150px;border-radius:14px;margin-bottom:12px">ใส่รูป QR รับเงิน: &lt;img src="qr.png"&gt;</div>
+        <div class="field"><label>ยอดเงิน (บาท)</label><input id="t-amt" type="number" min="10"></div>
+        <div class="field"><label>เลขอ้างอิง / 4 ตัวท้ายบัญชีที่โอน</label><input id="t-ref"></div>
+        <button class="btn" id="t-go">แจ้งเติมเงิน</button>`;
+      $('t-go').onclick = async () => { try { await api('topup', {amount:$('t-amt').value, ref:$('t-ref').value}); toast('ส่งคำขอแล้ว รอแอดมินอนุมัติ'); showPanel('orders'); } catch (m) { toast(m); } };
+    } else {
+      const d = await api('admin/topups');
+      B.innerHTML = '<h3>คำขอเติมเงินที่รออนุมัติ</h3>' + (d.topups.map(t => `<div class="row">${esc(t.username)} • ${t.amount} บาท • ${esc(t.ref)} <button class="btn" data-ap="${t.id}">อนุมัติ</button> <button class="btn ghost" data-rj="${t.id}">ปฏิเสธ</button></div>`).join('') || '<p class="sub">ไม่มีรายการ</p>') + `
+        <h3>เพิ่มหมวดหมู่</h3><div class="field"><input id="a-cn" placeholder="ชื่อหมวดหมู่"></div><div class="field"><input id="a-ci" placeholder="ลิงก์รูป (ไม่บังคับ)"></div><button class="btn" id="a-cat">เพิ่มหมวดหมู่</button>
+        <h3>เพิ่มสินค้า</h3><div class="field"><input id="a-pn" placeholder="ชื่อสินค้า"></div><div class="field"><input id="a-pp" type="number" placeholder="ราคา (บาท)"></div><div class="field"><input id="a-pi" placeholder="ลิงก์รูป (ไม่บังคับ)"></div>
+        <div class="field"><select id="a-pc" style="width:100%;padding:10px;border-radius:12px;border:1px solid var(--line)"><option value="">ไม่มีหมวดหมู่</option>${SHOP.categories.map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join('')}</select></div><button class="btn" id="a-prod">เพิ่มสินค้า</button>
+        <h3>เพิ่มสต๊อก (1 บรรทัด = 1 ชิ้น เช่น user:pass)</h3>
+        <div class="field"><select id="a-sp" style="width:100%;padding:10px;border-radius:12px;border:1px solid var(--line)">${SHOP.products.map(p => `<option value="${p.id}">${esc(p.name)}</option>`).join('')}</select></div>
+        <div class="field"><textarea id="a-sl" rows="4" style="width:100%;padding:10px;border-radius:12px;border:1px solid var(--line);font:inherit"></textarea></div><button class="btn" id="a-stock">เพิ่มสต๊อก</button>`;
+      const go = (u, b, m) => async () => { try { await api(u, b()); toast(m); await loadShop(); showPanel('admin'); } catch (e) { toast(e); } };
+      $('a-cat').onclick = go('admin/category', () => ({name:$('a-cn').value, img:$('a-ci').value}), 'เพิ่มหมวดหมู่แล้ว');
+      $('a-prod').onclick = go('admin/product', () => ({name:$('a-pn').value, price:$('a-pp').value, img:$('a-pi').value, category_id:$('a-pc').value}), 'เพิ่มสินค้าแล้ว');
+      $('a-stock').onclick = go('admin/stock', () => ({product_id:$('a-sp').value, lines:$('a-sl').value}), 'เพิ่มสต๊อกแล้ว');
+      B.querySelectorAll('[data-ap],[data-rj]').forEach(b => b.onclick = go('admin/topup', () => ({id:b.dataset.ap || b.dataset.rj, approve:!!b.dataset.ap}), 'ดำเนินการแล้ว'));
+    }
+  } catch (m) { B.textContent = m; }
+}
+$('uname').onclick = () => showPanel('orders');
+document.querySelectorAll('#ptabs button').forEach(b => b.onclick = () => showPanel(b.dataset.p));
+$('pclose').onclick = () => panel.classList.remove('open');
+panel.addEventListener('click', e => { if (e.target === panel) panel.classList.remove('open'); });
+
+(async () => { try { ME = (await api('me')).user; } catch {} refreshUser(); loadShop(); })();
+</script>
+</body>
+</html>
